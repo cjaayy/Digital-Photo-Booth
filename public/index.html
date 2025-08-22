@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Photo Booth</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="booth">
+      <header class="booth__header">
+        <div class="brand">
+          <h1>Photo Booth</h1>
+          <p class="tag">Snap • Print • Smile</p>
+        </div>
+        <div class="printer-select">
+          <label for="printerSelect">Printer</label>
+          <select id="printerSelect">
+            <option>Loading printers...</option>
+          </select>
+        </div>
+          <div class="template-select">
+            <label for="templateSelect">Layout</label>
+            <select id="templateSelect">
+              <option value="single">Single</option>
+              <option value="two">Two-up</option>
+              <option value="four">4-Grid</option>
+              <option value="polaroid">Polaroid</option>
+            </select>
+          </div>
+      </header>
+
+      <section class="stage">
+        <div class="stage__frame">
+          <video id="video" autoplay playsinline muted></video>
+          <canvas id="canvas" style="display: none"></canvas>
+          <div id="countdown" class="countdown" aria-hidden="true"></div>
+          <div id="flash" class="flash" aria-hidden="true"></div>
+          <div class="frame-decor"></div>
+        </div>
+      </section>
+
+      <section id="preview" class="preview" aria-live="polite"></section>
+
+      <section class="controls">
+        <div class="controls__left">
+          <button id="capture" class="btn capture primary">Capture</button>
+          <button id="printBtn" class="btn" disabled>Print</button>
+          <button id="pdfBtn" class="btn" disabled>Save as PDF</button>
+          <button id="deleteBtn" class="btn danger" disabled>Delete</button>
+        </div>
+        <div class="controls__right">
+          <div class="help">
+            Tip: Use the Capture button or press <kbd>Space</kbd>
+          </div>
+        </div>
+      </section>
+
+      <section id="gallery" class="gallery" aria-live="polite"></section>
+
+      <footer class="booth__footer">
+        <p class="notes">
+          This demo runs server-side printing on Windows (mspaint). PDF
+          generation available as fallback.
+        </p>
+      </footer>
+    </main>
+    <script src="/app.js"></script>
+  </body>
+</html>
