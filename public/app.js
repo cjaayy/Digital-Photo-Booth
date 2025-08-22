@@ -6,7 +6,8 @@ const pdfBtn = document.getElementById("pdfBtn");
 const deleteBtn = document.getElementById("deleteBtn");
 const preview = document.getElementById("preview");
 const printerSelect = document.getElementById("printerSelect");
-const templateSelect = document.getElementById('templateSelect');
+const templateSelect = document.getElementById("templateSelect");
+const borderSelect = document.getElementById("borderSelect");
 const countdownEl = document.getElementById("countdown");
 const flashEl = document.getElementById("flash");
 const galleryEl = document.getElementById("gallery");
@@ -37,52 +38,67 @@ captureBtn.addEventListener("click", () => {
 });
 
 function doCapture() {
-  const template = templateSelect ? templateSelect.value : 'single';
-  if (template === 'single') {
+  const template = templateSelect ? templateSelect.value : "single";
+  if (template === "single") {
     const w = video.videoWidth;
     const h = video.videoHeight;
     canvas.width = w;
     canvas.height = h;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     ctx.drawImage(video, 0, 0, w, h);
-    currentDataUrl = canvas.toDataURL('image/png');
-  } else if (template === 'two') {
+    currentDataUrl = canvas.toDataURL("image/png");
+  } else if (template === "two") {
     composeMulti(2, 2);
     return;
-  } else if (template === 'four') {
+  } else if (template === "four") {
     composeMulti(4, 2);
     return;
-  } else if (template === 'polaroid') {
+  } else if (template === "polaroid") {
     const w = video.videoWidth;
     const h = video.videoHeight;
     canvas.width = w;
     canvas.height = h;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     ctx.drawImage(video, 0, 0, w, h);
     const pW = w;
     const pH = h + Math.round(h * 0.18);
-    const pCanvas = document.createElement('canvas');
+    const pCanvas = document.createElement("canvas");
     pCanvas.width = pW;
     pCanvas.height = pH;
-    const pCtx = pCanvas.getContext('2d');
-    pCtx.fillStyle = 'white';
+    const pCtx = pCanvas.getContext("2d");
+    pCtx.fillStyle = "white";
     pCtx.fillRect(0, 0, pW, pH);
     pCtx.drawImage(canvas, 0, 0, w, h);
-    currentDataUrl = pCanvas.toDataURL('image/png');
+    currentDataUrl = pCanvas.toDataURL("image/png");
   }
   // flash animation
-  flashEl.style.transition = 'none';
-  flashEl.style.opacity = '0.9';
+  flashEl.style.transition = "none";
+  flashEl.style.opacity = "0.9";
   requestAnimationFrame(() => {
-    flashEl.style.transition = 'opacity 400ms ease';
-    flashEl.style.opacity = '0';
+    flashEl.style.transition = "opacity 400ms ease";
+    flashEl.style.opacity = "0";
   });
-  // add to gallery and preview
-  const img = document.createElement('img');
+
+  // determine selected border (apply to thumbnail + preview)
+  const selected = borderSelect ? borderSelect.value : "none";
+  const borderMap = {
+    white: "border-white",
+    rounded: "border-rounded",
+    film: "border-film",
+    vintage: "border-vintage",
+  };
+  const borderClass = borderMap[selected] || "";
+
+  // add to gallery and preview (preview wrapped so border styles apply)
+  const img = document.createElement("img");
   img.src = currentDataUrl;
-  img.alt = 'capture';
-  preview.innerHTML = '';
-  preview.appendChild(img);
+  img.alt = "capture";
+  preview.innerHTML = "";
+  const pWrap = document.createElement("div");
+  pWrap.className = "thumb preview-thumb";
+  if (borderClass) pWrap.classList.add(borderClass);
+  pWrap.appendChild(img);
+  preview.appendChild(pWrap);
   addThumbnail(currentDataUrl, template);
   printBtn.disabled = false;
   pdfBtn.disabled = false;
@@ -109,17 +125,35 @@ function startCountdown(n) {
   });
 }
 
-function addThumbnail(dataUrl) {
+function addThumbnail(dataUrl, template = "single") {
+  const selected = borderSelect ? borderSelect.value : "none";
+  const borderMap = {
+    white: "border-white",
+    rounded: "border-rounded",
+    film: "border-film",
+    vintage: "border-vintage",
+  };
+  const borderClass = borderMap[selected] || "";
+
   const wrap = document.createElement("div");
   wrap.className = "thumb";
+  if (borderClass) wrap.classList.add(borderClass);
+  if (template) wrap.dataset.template = template;
+  if (borderClass) wrap.dataset.border = borderClass;
+
   const img = document.createElement("img");
   img.src = dataUrl;
   wrap.appendChild(img);
   wrap.addEventListener("click", () => {
     preview.innerHTML = "";
+    const pWrap = document.createElement("div");
+    pWrap.className = "thumb preview-thumb";
     const big = document.createElement("img");
     big.src = dataUrl;
-    preview.appendChild(big);
+    pWrap.appendChild(big);
+    const b = wrap.dataset.border;
+    if (b) pWrap.classList.add(b);
+    preview.appendChild(pWrap);
     currentDataUrl = dataUrl;
     printBtn.disabled = false;
     pdfBtn.disabled = false;
@@ -136,11 +170,11 @@ async function composeMulti(count, perRow) {
       h = video.videoHeight;
     canvas.width = w;
     canvas.height = h;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     ctx.drawImage(video, 0, 0, w, h);
-    imgs.push(canvas.toDataURL('image/png'));
-    flashEl.style.opacity = '0.8';
-    setTimeout(() => (flashEl.style.opacity = '0'), 120);
+    imgs.push(canvas.toDataURL("image/png"));
+    flashEl.style.opacity = "0.8";
+    setTimeout(() => (flashEl.style.opacity = "0"), 120);
   }
   const w = video.videoWidth;
   const h = video.videoHeight;
@@ -148,10 +182,10 @@ async function composeMulti(count, perRow) {
   const rows = Math.ceil(count / cols);
   const outW = cols * w;
   const outH = rows * h;
-  const oCanvas = document.createElement('canvas');
+  const oCanvas = document.createElement("canvas");
   oCanvas.width = outW;
   oCanvas.height = outH;
-  const oCtx = oCanvas.getContext('2d');
+  const oCtx = oCanvas.getContext("2d");
   // draw each image (ensure images are loaded)
   await Promise.all(
     imgs.map(
@@ -168,10 +202,10 @@ async function composeMulti(count, perRow) {
         })
     )
   );
-  currentDataUrl = oCanvas.toDataURL('image/png');
-  const el = document.createElement('img');
+  currentDataUrl = oCanvas.toDataURL("image/png");
+  const el = document.createElement("img");
   el.src = currentDataUrl;
-  preview.innerHTML = '';
+  preview.innerHTML = "";
   preview.appendChild(el);
   addThumbnail(currentDataUrl, `multi-${count}`);
   printBtn.disabled = false;

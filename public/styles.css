@@ -180,7 +180,54 @@ kbd {
 }
 
 /* Template selector styles */
-.template-select{margin-left:12px}
-.template-select select{padding:.35rem .5rem;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:inherit}
-.stage__frame.overlay .grid::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px);background-size:50% 50%;pointer-events:none}
-.stage__frame.polaroid .frame-decor{box-shadow:inset 0 0 0 8px rgba(255,255,255,0.02), 0 12px 40px rgba(2,6,23,0.7)}
+.template-select {
+  margin-left: 12px;
+}
+.template-select select {
+  padding: 0.35rem 0.5rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: transparent;
+  color: inherit;
+}
+.stage__frame.overlay .grid::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(
+    rgba(255, 255, 255, 0.02) 1px,
+    transparent 1px
+  );
+  background-size: 50% 50%;
+  pointer-events: none;
+}
+.stage__frame.polaroid .frame-decor {
+  box-shadow: inset 0 0 0 8px rgba(255, 255, 255, 0.02),
+    0 12px 40px rgba(2, 6, 23, 0.7);
+}
+
+/* Border selector styles */
+.border-select {
+  margin-left: 12px;
+}
+.border-select select {
+  padding: 0.35rem 0.5rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: transparent;
+  color: inherit;
+}
+.thumb.border-white {
+  border: 10px solid #fff;
+}
+.thumb.border-rounded img {
+  border-radius: 12px;
+}
+.thumb.border-film {
+  background: linear-gradient(90deg, #111, #222);
+  padding: 6px;
+}
+.thumb.border-vintage {
+  filter: sepia(0.35) contrast(1.05);
+  box-shadow: inset 0 0 0 4px rgba(255, 240, 220, 0.06);
+}

@@ -19,15 +19,15 @@
             <option>Loading printers...</option>
           </select>
         </div>
-          <div class="template-select">
-            <label for="templateSelect">Layout</label>
-            <select id="templateSelect">
-              <option value="single">Single</option>
-              <option value="two">Two-up</option>
-              <option value="four">4-Grid</option>
-              <option value="polaroid">Polaroid</option>
-            </select>
-          </div>
+        <div class="template-select">
+          <label for="templateSelect">Layout</label>
+          <select id="templateSelect">
+            <option value="single">Single</option>
+            <option value="two">Two-up</option>
+            <option value="four">4-Grid</option>
+            <option value="polaroid">Polaroid</option>
+          </select>
+        </div>
       </header>
 
       <section class="stage">
@@ -58,6 +58,16 @@
 
       <section id="gallery" class="gallery" aria-live="polite"></section>
 
+      <div class="border-select">
+        <label for="borderSelect">Border</label>
+        <select id="borderSelect">
+          <option value="none">None</option>
+          <option value="white">White Frame</option>
+          <option value="rounded">Rounded</option>
+          <option value="film">Film Strip</option>
+          <option value="vintage">Vintage</option>
+        </select>
+      </div>
       <footer class="booth__footer">
         <p class="notes">
           This demo runs server-side printing on Windows (mspaint). PDF
